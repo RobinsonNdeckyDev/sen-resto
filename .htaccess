@@ -1,0 +1,30 @@
+# Activer la réécriture d'URL
+RewriteEngine On
+
+# Redirection vers le fichier index.php par défaut
+DirectoryIndex index.php
+
+# Réécriture des URL pour les pages
+RewriteRule ^connexion$ auth/login.php [L]
+RewriteRule ^inscription$ auth/register.php [L]
+RewriteRule ^accueil$ pages/accueil.php [L]
+RewriteRule ^about$ pages/about.php [L]
+RewriteRule ^recette/([0-9]+)$ pages/detail_recette.php?id=$1 [L]
+RewriteRule ^creer_recette$ pages/create_recette.php [L]
+RewriteRule ^modifier_recette/([0-9]+)$ pages/update.php?id=$1 [L]
+
+# Redirection vers index.php pour les requêtes non trouvées
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Suppression de l'extension .php dans l'URL (optionnel)
+# RewriteRule ^(.*)/?$ $1.php [L]
+
+# erreurs 404 (page non trouvée)
+ErrorDocument 404 /pages/404.php
+
+# Protéger les fichiers PHP sensibles
+<FilesMatch "\.(ini|phar|sql|env|log)$">
+    Require all denied
+</FilesMatch>
